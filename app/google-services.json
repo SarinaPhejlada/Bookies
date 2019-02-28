@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "471479462981",
+    "firebase_url": "https://bookies-453ce.firebaseio.com",
+    "project_id": "bookies-453ce",
+    "storage_bucket": "bookies-453ce.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:471479462981:android:a17f05dbd67e083b",
+        "android_client_info": {
+          "package_name": "com.example.bookies"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "471479462981-o4v5s4lfohbq4t7qk30gg9phfekvmov0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBhfwu0aXh2mzQdQhegYXjZHPqmyrcxUdY"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
