@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "471479462981-6h16g0p7l0um9sjd9n3o0350ftisfmlv.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.bookies",
+            "certificate_hash": "07ab67bd597d258dfc82eb4f32197adbab9cf21d"
+          }
+        },
+        {
           "client_id": "471479462981-o4v5s4lfohbq4t7qk30gg9phfekvmov0.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -29,8 +37,13 @@
           "status": 1
         },
         "appinvite_service": {
-          "status": 1,
-          "other_platform_oauth_client": []
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "471479462981-o4v5s4lfohbq4t7qk30gg9phfekvmov0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         },
         "ads_service": {
           "status": 2

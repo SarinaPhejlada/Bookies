@@ -11,6 +11,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.UiThread;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -19,9 +20,20 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.ml.vision.FirebaseVision;
 import com.google.firebase.ml.vision.common.FirebaseVisionImage;
 import com.google.firebase.ml.vision.text.FirebaseVisionText;
@@ -47,6 +59,7 @@ public class IsbnActivity extends AppCompatActivity {
     //private ImageView imageView; //to show the image captured (optional)
     private Bitmap bitmapImage; //saves image taken or uploaded
     private String retrievedText; //contains text after it's processed by detector
+    FirebaseFirestore db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +72,8 @@ public class IsbnActivity extends AppCompatActivity {
          take =  findViewById(R.id.takeBtn);
          upload =  findViewById(R.id.uploadBtn);
          isbnEditText = findViewById(R.id.isbn);
+         FirebaseApp.initializeApp(IsbnActivity.this);
+         db = FirebaseFirestore.getInstance();//database instance
 
          //code for home button
         home.setOnClickListener(new View.OnClickListener() {
@@ -73,9 +88,17 @@ public class IsbnActivity extends AppCompatActivity {
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //***causing app to crash
-//                Intent i = new Intent(getApplicationContext(), ReviewActivity.class);
-//                startActivity(i);
+                try {
+
+                        getBookReview(String.valueOf(isbnEditText.getText()));
+                    }
+                catch(Exception e){
+                    Toast.makeText(IsbnActivity.this
+                            ,"ISBN field can't be null"
+                            ,Toast.LENGTH_LONG)
+                            .show();
+                }
+
             }
         });
 
@@ -85,11 +108,6 @@ public class IsbnActivity extends AppCompatActivity {
             public void onClick(View v) {
                 //take picture
                 dispatchTakePictureIntent();
-
-                //***causing app to crash
-                //This is where info should be passed to the Review Activity to retrieve data
-//                Intent i = new Intent(getApplicationContext(), ReviewActivity.class);
-//                startActivity(i);
             }
         });
 
@@ -100,9 +118,6 @@ public class IsbnActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 requestPhotoFromGallery();
-                //***causeing app to crash
-//                Intent i = new Intent(getApplicationContext(), ReviewActivity.class);
-//                startActivity(i);
             }
         });
     }
@@ -216,7 +231,11 @@ public class IsbnActivity extends AppCompatActivity {
                 return textArray[++i];
             }
         }
-        return "ISBN Number Not Found.";
+        Toast.makeText(IsbnActivity.this
+                ,"ISBN Number Not Found "
+                ,Toast.LENGTH_LONG)
+                .show();
+        return null;
     }
     /**validates format of ISBN number*/
     //use when making request to database
@@ -226,4 +245,33 @@ public class IsbnActivity extends AppCompatActivity {
         +"[- 0-9X]{13}$|97[89][0-9]{10}$|(?=(?:[0-9]+[- ]){4})[- 0-9]{17}$)"
         +"(?:97[89][- ]?)?[0-9]{1,5}[- ]?[0-9]+[- ]?[0-9]+[- ]?[0-9X]$");
     }
+
+    /**Retrieves book review from database */
+    private void getBookReview(String isbnNumber){
+
+        db.collection("book")
+                .document(isbnNumber)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()) {
+
+                            DocumentSnapshot document = task.getResult();
+                            //passing data to Review Activity
+                            Intent i = new Intent(getApplicationContext(), ReviewActivity.class);
+                            i.putExtra("review",String.valueOf(document.getData()));
+                            startActivity(i);
+
+                        } else {
+                            Toast.makeText(IsbnActivity
+                                    .this,"ISBN number not found",Toast
+                                    .LENGTH_LONG)
+                                    .show();
+                        }
+                    }
+                });
+
+    }
+
 }
