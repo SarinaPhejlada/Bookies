@@ -48,18 +48,25 @@ import androidx.annotation.RequiresApi;
 public class IsbnActivity extends AppCompatActivity {
     //declaration of widgets
     private ImageButton home; //home button
-    private Button submit; // submit button
+    private Button submit; //submit button
     private Button take; //used to snap photo
     private Button upload; //used to upload already existing photo
-    private EditText isbnEditText; //edittext view for isbn number
+    private EditText isbnEditText; //EditText view for isbn number
 
-    //other variables
-    static final int REQUEST_IMAGE_CAPTURE = 1;
-    static final int REQUEST_IMAGE_UPLOAD = 2;
+    //variables used for image capture/upload
+    static final int REQUEST_IMAGE_CAPTURE = 1;// camera request code for onActivityResult method
+    static final int REQUEST_IMAGE_UPLOAD = 2;// upload request code for onActivityResult method
     //private ImageView imageView; //to show the image captured (optional)
     private Bitmap bitmapImage; //saves image taken or uploaded
     private String retrievedText; //contains text after it's processed by detector
+    //data base reference
     FirebaseFirestore db;
+
+    //variables to pass to ReviewActivity
+    String author
+            ,title
+            ,review
+            ,isbnNumber;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,7 +79,8 @@ public class IsbnActivity extends AppCompatActivity {
          take =  findViewById(R.id.takeBtn);
          upload =  findViewById(R.id.uploadBtn);
          isbnEditText = findViewById(R.id.isbn);
-         FirebaseApp.initializeApp(IsbnActivity.this);
+
+         //connecting to database
          db = FirebaseFirestore.getInstance();//database instance
 
          //code for home button
@@ -89,7 +97,7 @@ public class IsbnActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 try {
-
+                        //This method passes the database content to the ReviewActivity
                         getBookReview(String.valueOf(isbnEditText.getText()));
                     }
                 catch(Exception e){
@@ -98,7 +106,6 @@ public class IsbnActivity extends AppCompatActivity {
                             ,Toast.LENGTH_LONG)
                             .show();
                 }
-
             }
         });
 
@@ -106,7 +113,7 @@ public class IsbnActivity extends AppCompatActivity {
         take.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //take picture
+                //this method pulls up the camera and takes a picture
                 dispatchTakePictureIntent();
             }
         });
@@ -116,7 +123,7 @@ public class IsbnActivity extends AppCompatActivity {
             @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
             @Override
             public void onClick(View v) {
-
+                //this method allows user to pick a photo from their gallery
                 requestPhotoFromGallery();
             }
         });
@@ -150,6 +157,7 @@ public class IsbnActivity extends AppCompatActivity {
         startActivityForResult(photoChooserIntent, REQUEST_IMAGE_UPLOAD);
 
     }
+
     /**saves photo as bitmap in extras under "data"*/
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -165,16 +173,18 @@ public class IsbnActivity extends AppCompatActivity {
                 bitmapImage = BitmapFactory//converted from InputStream to Bitmap
                         .decodeStream(getContentResolver()//converted from Uri to InputStream
                                 .openInputStream(data.getData()));//data in form of Uri
+
                 //process photo using Firebase ML detector
                 processPhoto(bitmapImage);
-            } catch (FileNotFoundException e) {
-                Toast.makeText(IsbnActivity.this,"No image found",Toast.LENGTH_LONG).show();
 
+            }catch (FileNotFoundException e) {
+
+                Toast.makeText(IsbnActivity.this,"No image found",Toast.LENGTH_LONG).show();
                 e.printStackTrace();
             }
-
         }
     }
+
     /**process photo taken from camera using ML model*/
     private void processPhoto(Bitmap bImage){
 
@@ -237,6 +247,7 @@ public class IsbnActivity extends AppCompatActivity {
                 .show();
         return null;
     }
+
     /**validates format of ISBN number*/
     //use when making request to database
     private boolean isValidISBNFormat(String isbnNumber){
@@ -247,7 +258,7 @@ public class IsbnActivity extends AppCompatActivity {
     }
 
     /**Retrieves book review from database */
-    private void getBookReview(String isbnNumber){
+    private void getBookReview(final String isbnNumber){
 
         db.collection("book")
                 .document(isbnNumber)
@@ -257,17 +268,49 @@ public class IsbnActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                         if (task.isSuccessful()) {
 
+                            try{
+
                             DocumentSnapshot document = task.getResult();
+
                             //passing data to Review Activity
                             Intent i = new Intent(getApplicationContext(), ReviewActivity.class);
-                            i.putExtra("review",String.valueOf(document.getData()));
+
+                            //Data to be passed to ReviewActivity from database
+                            i.putExtra("review", document
+                                    .getData()
+                                    .get("amazon review")
+                                    .toString());
+
+                            i.putExtra("author", document
+                                    .getData()
+                                    .get("author")
+                                    .toString());
+
+                            i.putExtra("title", document
+                                    .getData()
+                                    .get("title")
+                                    .toString());
+
+                            i.putExtra("seller", document
+                                    .getData()
+                                    .get("seller")
+                                    .toString());
+
+                            i.putExtra("isbnNumber"
+                                    ,"ISBN #: "
+                                            + isbnNumber);
+
                             startActivity(i);
 
-                        } else {
-                            Toast.makeText(IsbnActivity
-                                    .this,"ISBN number not found",Toast
-                                    .LENGTH_LONG)
-                                    .show();
+                            }
+                            //in case retrieval fails
+                            catch(Exception e){
+                                Toast.makeText(IsbnActivity
+                                        .this,"ISBN number not found",Toast
+                                        .LENGTH_LONG)
+                                        .show();
+                            }
+
                         }
                     }
                 });

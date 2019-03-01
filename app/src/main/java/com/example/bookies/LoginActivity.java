@@ -21,38 +21,40 @@ import com.google.firebase.firestore.QuerySnapshot;
 import org.w3c.dom.Text;
 
 public class LoginActivity extends AppCompatActivity {
-
-    FirebaseFirestore db;
-    Button login;
-    TextView testText;
-    FirebaseDatabase database;
-    DatabaseReference myRef;
+    //widgets
+    Button loginButton
+            ,forgotPasswordButton
+            ,createAccountButton;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        login = (Button) findViewById(R.id.loginBtn);
-        Button forgot = (Button) findViewById(R.id.forgotBtn);
-        Button create = (Button) findViewById(R.id.createBtn);
 
+        //initializing widgets
+        loginButton = (Button) findViewById(R.id.loginBtn);
+        forgotPasswordButton = (Button) findViewById(R.id.forgotBtn);
+        createAccountButton = (Button) findViewById(R.id.createBtn);
 
-        login.setOnClickListener(new View.OnClickListener() {
+        //code for login button
+        loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(getApplicationContext(), HomeActivity.class);
                 startActivity(i);
             }
         });
-        forgot.setOnClickListener(new View.OnClickListener() {
+        //code for retrieving forgotten button
+        forgotPasswordButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(getApplicationContext(), ForgotActivity.class);
                 startActivity(i);
             }
         });
-        create.setOnClickListener(new View.OnClickListener() {
+        //code for creating an account
+        createAccountButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(getApplicationContext(), CreateActivity.class);
