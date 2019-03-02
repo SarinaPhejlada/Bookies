@@ -16,34 +16,42 @@
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginBottom="8dp"
+        android:foregroundGravity="center"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0">
 
         <ImageButton
             android:id="@+id/homeButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+            android:layout_width="379dp"
+            android:layout_height="198dp"
+            android:layout_gravity="center"
+            android:foregroundGravity="center"
             app:srcCompat="@drawable/logo" />
 
         <TextView
             android:id="@+id/header"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
             android:gravity="center"
             android:text="Book Review"
             android:textSize="36sp"
             app:fontFamily="sans-serif-smallcaps" />
 
+        <ImageView
+            android:id="@+id/bookImage"
+            android:layout_width="match_parent"
+            android:layout_height="99dp"
+            app:srcCompat="@mipmap/ic_launcher_round" />
+
         <LinearLayout
             android:id="@+id/VLinearLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
             android:orientation="horizontal">
 
             <TextView
@@ -65,6 +73,7 @@
                 android:text="Author"
                 android:textSize="18sp"
                 app:fontFamily="sans-serif-smallcaps" />
+
         </LinearLayout>
 
         <TextView
@@ -80,14 +89,12 @@
             android:id="@+id/review1"
             android:layout_width="match_parent"
             android:layout_height="125dp"
-            android:layout_marginTop="20dp"
             android:text="Review #1" />
 
         <TextView
             android:id="@+id/review2"
             android:layout_width="match_parent"
             android:layout_height="125dp"
-            android:layout_marginTop="20dp"
             android:text="Review #2" />
     </LinearLayout>
 
