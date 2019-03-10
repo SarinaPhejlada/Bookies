@@ -48,14 +48,6 @@
             android:text="Email" />
 
         <EditText
-            android:id="@+id/username"
-            android:layout_width="match_parent"
-            android:layout_height="75dp"
-            android:ems="10"
-            android:inputType="text"
-            android:text="Username" />
-
-        <EditText
             android:id="@+id/password"
             android:layout_width="match_parent"
             android:layout_height="75dp"
