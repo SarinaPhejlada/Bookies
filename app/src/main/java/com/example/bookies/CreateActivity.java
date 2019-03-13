@@ -42,7 +42,14 @@ public class CreateActivity extends AppCompatActivity {
             public void onClick(View v) {
                 try {
                     //This method verifies the credentials the user entered
-                    createAccount(String.valueOf(email.getText()), String.valueOf(password.getText()));
+                    if(!String.valueOf(email.getText()).equals("") || !String.valueOf(password.getText()).equals(""))
+                        createAccount(String.valueOf(email.getText()), String.valueOf(password.getText()));
+                    else{
+                        Toast.makeText(CreateActivity.this
+                                ,"Username/password cannot be null"
+                                ,Toast.LENGTH_LONG)
+                                .show();
+                    }
                 }
                 catch(Exception e){
                     Toast.makeText(CreateActivity.this
@@ -62,6 +69,10 @@ public class CreateActivity extends AppCompatActivity {
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
+                        Toast.makeText(CreateActivity.this
+                                ,"Account created"
+                                ,Toast.LENGTH_LONG)
+                                .show();
                         Intent i = new Intent(getApplicationContext(), LoginActivity.class);
                         startActivity(i);
                     }
