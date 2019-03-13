@@ -4,20 +4,24 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
+
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
+import com.squareup.picasso.Picasso;
+
 
 public class ReviewActivity extends AppCompatActivity {
 
     //widgets
-    TextView review1TextView
-            ,review2TextView// using it for seller temporarily
+    TextView reviewTextView
+            ,sellerTextView// using it for seller temporarily
             ,ISBNNumberTextView
             ,authorTextView
             ,titleTextView;
     ImageButton home;
 
+    ImageView image;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,20 +30,28 @@ public class ReviewActivity extends AppCompatActivity {
 
         //initializing variables
         home = findViewById(R.id.homeButton);
-        review1TextView = findViewById(R.id.review1);
-        review2TextView = findViewById(R.id.review2);
+        reviewTextView = findViewById(R.id.review1);
+        sellerTextView = findViewById(R.id.seller_textview);
         ISBNNumberTextView = findViewById(R.id.isbnReviewDisplay);
         authorTextView = findViewById(R.id.author);
         titleTextView = findViewById(R.id.title);
+        image = findViewById(R.id.bookImage);
 
         //Displaying review
-        review1TextView.setText(getIntent().getStringExtra("review"));
+        reviewTextView.setText(getIntent().getStringExtra("review"));
         ISBNNumberTextView.setText(getIntent().getStringExtra("isbnNumber"));
         authorTextView.setText(getIntent().getStringExtra("author"));
         titleTextView.setText(getIntent().getStringExtra("title"));
-        review2TextView.setText(getIntent().getStringExtra("seller"));//Temporary
+        sellerTextView.setText("Seller: "+getIntent().getStringExtra("seller"));//Temporary
 
+        //for image
+        Picasso.get()
+                .load(getIntent().getStringExtra("imageURL"))
+                .fit()
+                .centerCrop()
+                .into(image);
 
+        //navigate home
         home.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

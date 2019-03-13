@@ -62,11 +62,7 @@ public class IsbnActivity extends AppCompatActivity {
     //data base reference
     FirebaseFirestore db;
 
-    //variables to pass to ReviewActivity
-    String author
-            ,title
-            ,review
-            ,isbnNumber;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -232,8 +228,8 @@ public class IsbnActivity extends AppCompatActivity {
 
     /**filters text from photo and acquires ISBN number*/
     private String filterTextAndAcquireISBN(String text){
-        //TODO: make more accurate.
-        //splits text into seperate strings
+        //TODO: make more accurate. Needs to isolate just the isbn number.
+        //splits text into separate strings
         String[] textArray = text.trim().split(" ");
         //search through string array
         for(int i = 0; i<textArray.length;i++){
@@ -251,7 +247,7 @@ public class IsbnActivity extends AppCompatActivity {
     /**validates format of ISBN number*/
     //use when making request to database
     private boolean isValidISBNFormat(String isbnNumber){
-
+        //TODO: Tweak conditions before use
         return isbnNumber.matches("^(?:ISBN(?:-1[03])?:? )?(?=[0-9X]{10}$|(?=(?:[0-9]+[- ]){3})"
         +"[- 0-9X]{13}$|97[89][0-9]{10}$|(?=(?:[0-9]+[- ]){4})[- 0-9]{17}$)"
         +"(?:97[89][- ]?)?[0-9]{1,5}[- ]?[0-9]+[- ]?[0-9]+[- ]?[0-9X]$");
@@ -299,6 +295,11 @@ public class IsbnActivity extends AppCompatActivity {
                             i.putExtra("isbnNumber"
                                     ,"ISBN #: "
                                             + isbnNumber);
+
+                            i.putExtra("imageURL", document
+                                    .getData()
+                                    .get("image")
+                                    .toString());
 
                             startActivity(i);
 
