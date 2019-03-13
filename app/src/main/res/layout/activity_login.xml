@@ -37,8 +37,8 @@
             android:layout_height="75dp"
             android:layout_marginTop="10dp"
             android:ems="10"
+            android:hint="Enter email address"
             android:inputType="text"
-            android:text="Email"
             android:textSize="18sp" />
 
         <EditText
@@ -47,8 +47,8 @@
             android:layout_height="75dp"
             android:layout_marginTop="10dp"
             android:ems="10"
+            android:hint="Enter password"
             android:inputType="textPassword"
-            android:text="password"
             android:textSize="18sp" />
 
         <Button

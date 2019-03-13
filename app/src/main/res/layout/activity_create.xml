@@ -44,16 +44,16 @@
             android:layout_width="match_parent"
             android:layout_height="75dp"
             android:ems="10"
-            android:inputType="textEmailAddress"
-            android:text="Email" />
+            android:hint="Enter email adress"
+            android:inputType="textEmailAddress" />
 
         <EditText
             android:id="@+id/password"
             android:layout_width="match_parent"
             android:layout_height="75dp"
             android:ems="10"
-            android:inputType="textPassword"
-            android:text="password" />
+            android:hint="Enter password"
+            android:inputType="textPassword" />
 
         <Button
             android:id="@+id/createBtn"
