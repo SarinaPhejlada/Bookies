@@ -9,9 +9,13 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+
 
 import java.util.HashMap;
 import java.util.Map;
@@ -21,6 +25,8 @@ public class CreateActivity extends AppCompatActivity {
     private EditText email;
     private EditText password;
     private Button createButton;
+
+    boolean exist;
 
     //data base reference
     FirebaseFirestore db;
@@ -53,7 +59,7 @@ public class CreateActivity extends AppCompatActivity {
                 }
                 catch(Exception e){
                     Toast.makeText(CreateActivity.this
-                            ,"Failed to an create account"
+                            ,"Failed to create an account"
                             ,Toast.LENGTH_LONG)
                             .show();
                 }
@@ -64,27 +70,60 @@ public class CreateActivity extends AppCompatActivity {
     private void createAccount(final String email, final String password){
         Map<String, Object> user = new HashMap<>();
         user.put("password", password);
+        if(existingAccount(email)) {
+            db.collection("account").document(email)
+                    .set(user)
+                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            Toast.makeText(CreateActivity.this
+                                    , "Account created"
+                                    , Toast.LENGTH_LONG)
+                                    .show();
+                            Intent i = new Intent(getApplicationContext(), LoginActivity.class);
+                            startActivity(i);
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Toast.makeText(CreateActivity.this
+                                    , "Account could not be created"
+                                    , Toast.LENGTH_LONG)
+                                    .show();
+                        }
+                    });
+        }
+        else{
+            Toast.makeText(CreateActivity.this
+                    , "Account already exists for email"
+                    , Toast.LENGTH_LONG)
+                    .show();
+        }
+    }
+    //check if account already exists
+    private boolean existingAccount(final String email){
+        exist = false;
         db.collection("account").document(email)
-                .set(user)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                     @Override
-                    public void onSuccess(Void aVoid) {
-                        Toast.makeText(CreateActivity.this
-                                ,"Account created"
-                                ,Toast.LENGTH_LONG)
-                                .show();
-                        Intent i = new Intent(getApplicationContext(), LoginActivity.class);
-                        startActivity(i);
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(CreateActivity.this
-                                ,"Account could not be created"
-                                ,Toast.LENGTH_LONG)
-                                .show();
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if(task.isSuccessful()) {
+                            DocumentSnapshot document = task.getResult();
+                            if (document.exists())
+                                exist = true;
+                            else
+                                exist = false;
+                        }
+                        else{
+                            Toast.makeText(CreateActivity.this
+                                    ,"Account could not be created"
+                                    ,Toast.LENGTH_LONG)
+                                    .show();
+                        }
                     }
                 });
+        return exist;
     }
 }
