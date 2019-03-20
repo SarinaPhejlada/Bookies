@@ -2,10 +2,11 @@ package com.example.bookies;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Test;
 
 import static org.junit.Assert.*;
 
-public class ReviewActivityTest {
+public class ForgotActivityTest {
 
     @Before
     public void setUp() throws Exception {
@@ -15,8 +16,6 @@ public class ReviewActivityTest {
     public void tearDown() throws Exception {
     }
 
-    public void retrievalOfInformationTest(){
-        //TODO: simply check that getStringExtras() method is outputing valid values.
-    }
-
+    @Test
+    public void test(){}
 }

@@ -38,5 +38,11 @@ dependencies {
     implementation 'com.google.firebase:firebase-core:16.0.1'
     implementation 'com.android.support:multidex:1.0.3'
 
+    androidTestImplementation 'com.android.support.test:rules:1.0.2'
+    androidTestImplementation 'com.android.support.test:runner:1.0.2'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:2.2.2',{
+        exclude group: 'con.android.support', module: 'support-annotations'
+    }
+
 }
 apply plugin: 'com.google.gms.google-services'

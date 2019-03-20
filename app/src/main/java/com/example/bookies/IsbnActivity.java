@@ -247,7 +247,7 @@ public class IsbnActivity extends AppCompatActivity {
 
     /**validates format of ISBN number*/
     //use when making request to database
-    private boolean isValidISBNFormat(String isbnNumber){
+    protected boolean isValidISBNFormat(String isbnNumber){
         //TODO: Tweak conditions before use
         return isbnNumber.matches("^(?:ISBN(?:-1[03])?:? )?(?=[0-9X]{10}$|(?=(?:[0-9]+[- ]){3})"
         +"[- 0-9X]{13}$|97[89][0-9]{10}$|(?=(?:[0-9]+[- ]){4})[- 0-9]{17}$)"
@@ -255,7 +255,9 @@ public class IsbnActivity extends AppCompatActivity {
     }
 
     /**Retrieves book review from database */
-    private void getBookReview(final String isbnNumber){
+    protected Book getBookReview(final String isbnNumber){
+
+        final Book[] books = new Book[1];
 
         book = new Book();//instantiate book object
 
@@ -305,6 +307,7 @@ public class IsbnActivity extends AppCompatActivity {
                             //passing book to reviewActivity
                             i.putExtra("book",book);
 
+                            books[0] = book;
                             startActivity(i);//starting activity
 
                             }
@@ -319,7 +322,7 @@ public class IsbnActivity extends AppCompatActivity {
                         }
                     }
                 });
-
+        return books[0];
     }
 
 }

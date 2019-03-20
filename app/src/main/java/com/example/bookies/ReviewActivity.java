@@ -30,6 +30,9 @@ public class ReviewActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_review);
 
+        //retrieving book from isbnActivity
+        book = (Book) getIntent().getSerializableExtra("book");
+
         //initializing variables
         home = findViewById(R.id.homeButton);
         reviewTextView = findViewById(R.id.review1);
@@ -40,7 +43,7 @@ public class ReviewActivity extends AppCompatActivity {
         image = findViewById(R.id.bookImage);
 
         //retrieving and displaying book information
-        retrieveAndDisplayBookInformation();
+        retrieveAndDisplayBookInformation(book);
 
         //navigate home
         home.setOnClickListener(new View.OnClickListener() {
@@ -53,10 +56,7 @@ public class ReviewActivity extends AppCompatActivity {
     }
 
     /** retrieves book info from IsbnActivity and displays the info using this activities' views*/
-    private void retrieveAndDisplayBookInformation(){
-
-        //retrieving book from isbnActivity
-        book = (Book) getIntent().getSerializableExtra("book");
+    protected void retrieveAndDisplayBookInformation(Book book){
 
         //Displaying review
         reviewTextView.setText(book.getReview());
