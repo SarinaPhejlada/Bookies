@@ -59,10 +59,11 @@ public class IsbnActivity extends AppCompatActivity {
     //private ImageView imageView; //to show the image captured (optional)
     private Bitmap bitmapImage; //saves image taken or uploaded
     private String retrievedText; //contains text after it's processed by detector
+
     //data base reference
     FirebaseFirestore db;
 
-
+    Book book;//book object
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -256,6 +257,8 @@ public class IsbnActivity extends AppCompatActivity {
     /**Retrieves book review from database */
     private void getBookReview(final String isbnNumber){
 
+        book = new Book();//instantiate book object
+
         db.collection("book")
                 .document(isbnNumber)
                 .get()
@@ -271,37 +274,38 @@ public class IsbnActivity extends AppCompatActivity {
                             //passing data to Review Activity
                             Intent i = new Intent(getApplicationContext(), ReviewActivity.class);
 
-                            //Data to be passed to ReviewActivity from database
-                            i.putExtra("review", document
-                                    .getData()
-                                    .get("amazon review")
-                                    .toString());
-
-                            i.putExtra("author", document
+                            //retrieving book data from database
+                            book.setAuthor(document
                                     .getData()
                                     .get("author")
                                     .toString());
 
-                            i.putExtra("title", document
+                            book.setReview(document
+                                    .getData()
+                                    .get("amazon review")
+                                    .toString());
+
+                            book.setTitle(document
                                     .getData()
                                     .get("title")
                                     .toString());
 
-                            i.putExtra("seller", document
+                            book.setSeller(document
                                     .getData()
                                     .get("seller")
                                     .toString());
 
-                            i.putExtra("isbnNumber"
-                                    ,"ISBN #: "
-                                            + isbnNumber);
+                            book.setISBNNumber("ISBN #: "
+                                    + isbnNumber);
 
-                            i.putExtra("imageURL", document
+                            book.setImageLink(document
                                     .getData()
                                     .get("image")
                                     .toString());
+                            //passing book to reviewActivity
+                            i.putExtra("book",book);
 
-                            startActivity(i);
+                            startActivity(i);//starting activity
 
                             }
                             //in case retrieval fails

@@ -23,6 +23,8 @@ public class ReviewActivity extends AppCompatActivity {
 
     ImageView image;
 
+    Book book;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,19 +39,8 @@ public class ReviewActivity extends AppCompatActivity {
         titleTextView = findViewById(R.id.title);
         image = findViewById(R.id.bookImage);
 
-        //Displaying review
-        reviewTextView.setText(getIntent().getStringExtra("review"));
-        ISBNNumberTextView.setText(getIntent().getStringExtra("isbnNumber"));
-        authorTextView.setText(getIntent().getStringExtra("author"));
-        titleTextView.setText(getIntent().getStringExtra("title"));
-        sellerTextView.setText("Seller: "+getIntent().getStringExtra("seller"));//Temporary
-
-        //for image
-        Picasso.get()
-                .load(getIntent().getStringExtra("imageURL"))
-                .fit()
-                .centerCrop()
-                .into(image);
+        //retrieving and displaying book information
+        retrieveAndDisplayBookInformation();
 
         //navigate home
         home.setOnClickListener(new View.OnClickListener() {
@@ -59,5 +50,26 @@ public class ReviewActivity extends AppCompatActivity {
                 startActivity(i);
             }
         });
+    }
+
+    /** retrieves book info from IsbnActivity and displays the info using this activities' views*/
+    private void retrieveAndDisplayBookInformation(){
+
+        //retrieving book from isbnActivity
+        book = (Book) getIntent().getSerializableExtra("book");
+
+        //Displaying review
+        reviewTextView.setText(book.getReview());
+        ISBNNumberTextView.setText(book.getISBNNumber());
+        authorTextView.setText(book.getAuthor());
+        titleTextView.setText(book.getTitle());
+        sellerTextView.setText("Seller: "+book.getSeller());//Temporary
+
+        //retrieving and displaying book cover image
+        Picasso.get()
+                .load(book.getImageLink())
+                .fit()
+                .centerCrop()
+                .into(image);
     }
 }
