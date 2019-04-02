@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -13,6 +14,9 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -30,6 +34,7 @@ public class CreateActivity extends AppCompatActivity {
 
     //data base reference
     FirebaseFirestore db;
+    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,12 +47,13 @@ public class CreateActivity extends AppCompatActivity {
 
         //connecting to database
         db = FirebaseFirestore.getInstance();//database instance
+        mAuth = FirebaseAuth.getInstance();
 
         createButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 try {
-                    //This method verifies the credentials the user entered
+                    /*This method verifies the credentials the user entered
                     if(!String.valueOf(email.getText()).equals("") || !String.valueOf(password.getText()).equals(""))
                         createAccount(String.valueOf(email.getText()), String.valueOf(password.getText()));
                     else{
@@ -55,19 +61,60 @@ public class CreateActivity extends AppCompatActivity {
                                 ,"Username/password cannot be null"
                                 ,Toast.LENGTH_LONG)
                                 .show();
-                    }
+                    }*/
+                    registerUser();
                 }
                 catch(Exception e){
                     Toast.makeText(CreateActivity.this
                             ,"Failed to create an account"
-                            ,Toast.LENGTH_LONG)
+                            ,Toast.LENGTH_SHORT)
                             .show();
                 }
             }
         });
     }
+
+    private void registerUser(){
+        String user = email.getText().toString();
+        String pass = password.getText().toString();
+        if (user.isEmpty()) {
+            email.setError("Email is required");
+            email.requestFocus();
+            return;
+        }
+        if (!Patterns.EMAIL_ADDRESS.matcher(user).matches()) {
+            email.setError("Please enter a valid email");
+            email.requestFocus();
+            return;
+        }
+        if (pass.isEmpty()) {
+            password.setError("Password is required");
+            password.requestFocus();
+            return;
+        }
+        mAuth.createUserWithEmailAndPassword(user, pass).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                if (task.isSuccessful()) {
+                    finish();
+                    startActivity(new Intent(CreateActivity.this, HomeActivity.class));
+                } else {
+
+                    if (task.getException() instanceof FirebaseAuthUserCollisionException) {
+                        Toast.makeText(getApplicationContext(), "You are already registered", Toast.LENGTH_LONG).show();
+
+                    } else {
+                        Toast.makeText(getApplicationContext(), "Error occurred: " + task.getException().getMessage(), Toast.LENGTH_LONG).show();
+                    }
+
+                }
+            }
+        });
+
+    }
+
     //create account in database
-    private void createAccount(final String email, final String password){
+    /*private void createAccount(final String email, final String password){
         Map<String, Object> user = new HashMap<>();
         user.put("password", password);
         if(existingAccount(email)) {
@@ -125,5 +172,5 @@ public class CreateActivity extends AppCompatActivity {
                     }
                 });
         return exist;
-    }
+    }*/
 }
