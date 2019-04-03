@@ -44,5 +44,8 @@ dependencies {
         exclude group: 'con.android.support', module: 'support-annotations'
     }
 
+    implementation 'com.google.android.gms:play-services-auth:16.0.0'
+    implementation 'me.dm7.barcodescanner:zxing:1.9'
+
 }
 apply plugin: 'com.google.gms.google-services'

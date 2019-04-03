@@ -51,7 +51,7 @@ public class IsbnActivity extends AppCompatActivity {
     private Button submit; //submit button
     private Button take; //used to snap photo
     private Button upload; //used to upload already existing photo
-    private EditText isbnEditText; //EditText view for isbn number
+    protected static EditText isbnEditText; //EditText view for isbn number
 
     //variables used for image capture/upload
     static final int REQUEST_IMAGE_CAPTURE = 1;// camera request code for onActivityResult method
@@ -110,8 +110,8 @@ public class IsbnActivity extends AppCompatActivity {
         take.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //this method pulls up the camera and takes a picture
-                dispatchTakePictureIntent();
+                Intent i = new Intent(getApplicationContext(), BarcodeScannerActivity.class);
+                startActivity(i);
             }
         });
 
@@ -121,6 +121,7 @@ public class IsbnActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //this method allows user to pick a photo from their gallery
+                //TODO: change to read barcode
                 requestPhotoFromGallery();
             }
         });
