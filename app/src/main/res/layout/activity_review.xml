@@ -25,14 +25,6 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="1.0">
 
-        <ImageButton
-            android:id="@+id/homeButton"
-            android:layout_width="379dp"
-            android:layout_height="198dp"
-            android:layout_gravity="center"
-            android:foregroundGravity="center"
-            app:srcCompat="@drawable/logo" />
-
         <TextView
             android:id="@+id/header"
             android:layout_width="match_parent"
@@ -45,7 +37,8 @@
         <ImageView
             android:id="@+id/bookImage"
             android:layout_width="match_parent"
-            android:layout_height="99dp" />
+            android:layout_height="317dp"
+            android:scaleType="fitCenter" />
 
         <LinearLayout
             android:id="@+id/VLinearLayout"
@@ -93,7 +86,7 @@
         <TextView
             android:id="@+id/seller_textview"
             android:layout_width="match_parent"
-            android:layout_height="125dp"
+            android:layout_height="47dp"
             android:text="Review #2" />
     </LinearLayout>
 
