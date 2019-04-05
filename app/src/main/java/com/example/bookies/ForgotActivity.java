@@ -16,8 +16,9 @@ import com.google.firebase.auth.FirebaseAuth;
 
 public class ForgotActivity extends AppCompatActivity {
     //widgets
-    private EditText email;
+    protected static EditText email;
     private Button submit;
+    protected static String error;
 
     //database reference
     private FirebaseAuth mAuth;
@@ -53,25 +54,25 @@ public class ForgotActivity extends AppCompatActivity {
         if (user.isEmpty()) {
             email.setError("Email is required");
             email.requestFocus();
-            return;
         }
-        if (!Patterns.EMAIL_ADDRESS.matcher(user).matches()) {
+        else if (!Patterns.EMAIL_ADDRESS.matcher(user).matches()) {
             email.setError("Please enter a valid email");
             email.requestFocus();
-            return;
         }
-        mAuth.sendPasswordResetEmail(user).addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                if(task.isSuccessful()){
-                    Toast.makeText(getApplicationContext(), "Check your email to reset your password", Toast.LENGTH_SHORT).show();
-                    Intent i = new Intent(getApplicationContext(), LoginActivity.class);
-                    startActivity(i);
+        else {
+            mAuth.sendPasswordResetEmail(user).addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    if (task.isSuccessful()) {
+                        Toast.makeText(getApplicationContext(), "Check your email to reset your password", Toast.LENGTH_LONG).show();
+                        Intent i = new Intent(getApplicationContext(), LoginActivity.class);
+                        startActivity(i);
+                    } else {
+                        error = "Error: account does not exist";
+                        Toast.makeText(getApplicationContext(), error, Toast.LENGTH_LONG).show();
+                    }
                 }
-                else{
-                    Toast.makeText(getApplicationContext(), "Error occurred " + task.getException().getMessage(), Toast.LENGTH_LONG).show();
-                }
-            }
-        });
+            });
+        }
     }
 }
