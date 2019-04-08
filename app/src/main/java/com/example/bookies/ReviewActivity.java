@@ -75,7 +75,7 @@ public class ReviewActivity extends AppCompatActivity {
 
         //Displaying review
         reviewTextView.setText(book.getReview());
-        ISBNNumberTextView.setText(book.getISBNNumber());
+        ISBNNumberTextView.setText("ISBN #: " + book.getISBNNumber());
         authorTextView.setText(book.getAuthor());
         titleTextView.setText(book.getTitle());
         sellerTextView.setText("Seller: "+book.getSeller());//Temporary
@@ -98,13 +98,13 @@ public class ReviewActivity extends AppCompatActivity {
                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {
-                            Toast.makeText(ReviewActivity.this, "success", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(ReviewActivity.this, "Book added to history", Toast.LENGTH_SHORT).show();
                         }
                     })
                     .addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
-                            Toast.makeText(ReviewActivity.this, "failed", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(ReviewActivity.this, "Error adding book to history", Toast.LENGTH_SHORT).show();
                         }
                     });
         }
@@ -120,7 +120,7 @@ public class ReviewActivity extends AppCompatActivity {
                     .addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
-                            Toast.makeText(ReviewActivity.this, "Error getting account history", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(ReviewActivity.this, "Error creating account history", Toast.LENGTH_SHORT).show();
                         }
                     });
         }
