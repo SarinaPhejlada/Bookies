@@ -1,6 +1,7 @@
 package com.example.bookies;
 
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -8,7 +9,19 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.squareup.picasso.Picasso;
+
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class ReviewActivity extends AppCompatActivity {
@@ -19,11 +32,15 @@ public class ReviewActivity extends AppCompatActivity {
             ,ISBNNumberTextView
             ,authorTextView
             ,titleTextView;
-    //ImageButton home;
-
     ImageView image;
 
+    //other
     Book book;
+    boolean exist;
+
+    //database
+    FirebaseFirestore db;
+    FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,7 +51,6 @@ public class ReviewActivity extends AppCompatActivity {
         book = (Book) getIntent().getSerializableExtra("book");
 
         //initializing variables
-        //home = findViewById(R.id.homeButton);
         reviewTextView = findViewById(R.id.review1);
         sellerTextView = findViewById(R.id.seller_textview);
         ISBNNumberTextView = findViewById(R.id.isbnReviewDisplay);
@@ -42,17 +58,16 @@ public class ReviewActivity extends AppCompatActivity {
         titleTextView = findViewById(R.id.title);
         image = findViewById(R.id.bookImage);
 
+        //initialize db
+        db = FirebaseFirestore.getInstance();
+        mAuth = FirebaseAuth.getInstance();
+
         //retrieving and displaying book information
         retrieveAndDisplayBookInformation(book);
 
-        /*navigate home
-        home.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(getApplicationContext(), HomeActivity.class);
-                startActivity(i);
-            }
-        });*/
+        //adding book to history table
+        addHistory(mAuth.getCurrentUser().getEmail(), book);
+
     }
 
     /** retrieves book info from IsbnActivity and displays the info using this activities' views*/
@@ -69,7 +84,64 @@ public class ReviewActivity extends AppCompatActivity {
         Picasso.get()
                 .load(book.getImageLink())
                 .fit()
-                .centerCrop()
+                .centerInside()
                 .into(image);
+    }
+
+    /** adds book to history table for user*/
+    private void addHistory(final String email, final Book book){
+        Map<String, Object> history = new HashMap<>();
+        history.put("1", book.getISBNNumber());
+        if(!existingAccount(email)) {
+            db.collection("history").document(email)
+                    .set(history)
+                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            Toast.makeText(ReviewActivity.this, "success", Toast.LENGTH_SHORT).show();
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Toast.makeText(ReviewActivity.this, "failed", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+        }
+        else{
+            db.collection("history").document(email)
+                    .set(email)
+                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            addHistory(email, book);
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Toast.makeText(ReviewActivity.this, "Error getting account history", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+        }
+    }
+
+    /** checks if user exists in history table*/
+    private boolean existingAccount(String email){
+        db.collection("history").document(email)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if(task.isSuccessful()) {
+                            DocumentSnapshot document = task.getResult();
+                            if (document.exists())
+                                exist = true;
+                            else
+                                exist = false;
+                        }
+                    }
+                });
+        return exist;
     }
 }
