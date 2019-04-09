@@ -19,6 +19,7 @@ import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 public class CreateActivityTest {
     @Rule
@@ -26,6 +27,7 @@ public class CreateActivityTest {
     private CreateActivity activity;
     private EditText password;
     private EditText email;
+    private boolean exist;
     Instrumentation.ActivityMonitor monitor = getInstrumentation()
             .addMonitor(HomeActivity.class.getName(),null,false);
 
@@ -46,7 +48,7 @@ public class CreateActivityTest {
         onView(withId(R.id.email)).perform(typeText("\n"));
         onView(withId(R.id.password)).perform(typeText("\n"));
         onView(withId(R.id.createBtn)).perform(click());
-        assertEquals(email.getError(), "Email is required");
+        assertEquals("Email is required", email.getError());
     }
 
     @Test
@@ -54,7 +56,7 @@ public class CreateActivityTest {
         onView(withId(R.id.email)).perform(typeText("bookiessp2019@gmail\n"));
         onView(withId(R.id.password)).perform(typeText("password\n"));
         onView(withId(R.id.createBtn)).perform(click());
-        assertEquals(email.getError(), "Please enter a valid email");
+        assertEquals("Please enter a valid email", email.getError());
     }
 
     @Test
@@ -62,7 +64,7 @@ public class CreateActivityTest {
         onView(withId(R.id.email)).perform(typeText("bookiessp2019@gmail.com\n"));
         onView(withId(R.id.password)).perform(typeText("\n"));
         onView(withId(R.id.createBtn)).perform(click());
-        assertEquals(password.getError(), "Password is required");
+        assertEquals("Password is required", password.getError());
     }
 
     @Test
@@ -70,14 +72,17 @@ public class CreateActivityTest {
         onView(withId(R.id.email)).perform(typeText("helloppl116@gmail.com\n"));
         onView(withId(R.id.password)).perform(typeText("123\n"));
         onView(withId(R.id.createBtn)).perform(click());
-        assertEquals(password.getError(), "Password must be at least 6 characters");
+        assertEquals("Password must be at least 6 characters", password.getError());
     }
 
     @Test
-    public void existingAccountTest(){ //failed
+    public void existingAccountTest() throws Exception{ //failed
         onView(withId(R.id.email)).perform(typeText("sarina1116@gmail.com\n"));
         onView(withId(R.id.password)).perform(typeText("sarina\n"));
         onView(withId(R.id.createBtn)).perform(click());
+        Thread.sleep(5000);
+        //assertTrue(exist);
+        assertEquals("Account already registered", email.getError());
     }
 
     @Test

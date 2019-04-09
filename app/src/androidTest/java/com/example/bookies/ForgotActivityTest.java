@@ -1,5 +1,7 @@
 package com.example.bookies;
 
+import android.app.Activity;
+import android.app.Instrumentation;
 import android.support.test.rule.ActivityTestRule;
 import android.widget.EditText;
 
@@ -8,6 +10,7 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
+import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.typeText;
@@ -21,13 +24,16 @@ public class ForgotActivityTest {
 
     private ForgotActivity activity;
     private EditText email;
-    private String error;
+    private boolean valid;
+
+    Instrumentation.ActivityMonitor monitor = getInstrumentation()
+            .addMonitor(LoginActivity.class.getName(),null,false);
 
     @Before
     public void setUp() throws Exception {
         activity = rule.getActivity();
         email = activity.email;
-        error = activity.error;
+        valid = activity.valid;
     }
 
     @After
@@ -39,26 +45,30 @@ public class ForgotActivityTest {
     public void emptyEmailTest(){
         onView(withId(R.id.email)).perform(typeText("\n"));
         onView(withId(R.id.submitBtn)).perform(click());
-        assertEquals(email.getError(), "Email is required");
+        assertEquals("Email is required", email.getError());
     }
 
     @Test
     public void invalidEmailTest(){
         onView(withId(R.id.email)).perform(typeText("bookiessp2019@gmail\n"));
         onView(withId(R.id.submitBtn)).perform(click());
-        assertEquals(email.getError(), "Please enter a valid email");
+        assertEquals("Please enter a valid email", email.getError());
     }
 
     @Test
-    public void nonexistingAccountTest(){ //failed
+    public void nonexistingAccountTest() throws Exception{
         onView(withId(R.id.email)).perform(typeText("pphejlada1@student.gsu.edu\n"));
         onView(withId(R.id.submitBtn)).perform(click());
-        assertEquals(error, "Error: account does not exist");
+        Thread.sleep(5000);
+        assertEquals("Account does not exist for email", email.getError());
     }
 
     @Test
-    public void validEmailTest(){ //failed
+    public void validEmailTest(){
         onView(withId(R.id.email)).perform(typeText("sarina1116@gmail.com\n"));
         onView(withId(R.id.submitBtn)).perform(click());
+        Activity loginActivity = getInstrumentation().waitForMonitorWithTimeout(monitor,5000);
+        assertNotNull(loginActivity);
+        loginActivity.finish();
     }
 }

@@ -17,6 +17,7 @@ import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 public class LoginActivityTest {
 
@@ -48,27 +49,29 @@ public class LoginActivityTest {
         onView(withId(R.id.username)).perform(typeText("\n"));
         onView(withId(R.id.password)).perform(typeText("\n"));
         onView(withId(R.id.loginBtn)).perform(click());
-        assertEquals(username.getError(), "Email is required");
+        assertEquals("Email is required", username.getError());
     }
     @Test
     public void invalidUserNameTest(){
         onView(withId(R.id.username)).perform(typeText("bookiessp2019@gmail\n"));
         onView(withId(R.id.password)).perform(typeText("123456\n"));
         onView(withId(R.id.loginBtn)).perform(click());
-        assertEquals(username.getError(), "Please enter a valid email");
+        assertEquals("Please enter a valid email", username.getError());
     }
     @Test
     public void missingPasswordTest(){
         onView(withId(R.id.username)).perform(typeText("bookiessp2019@gmail.com\n"));
         onView(withId(R.id.password)).perform(typeText("\n"));
         onView(withId(R.id.loginBtn)).perform(click());
-        assertEquals(password.getError(), "Password is required");
+        assertEquals("Password is required", password.getError());
     }
     @Test
-    public void invalidPasswordTest(){ //failed
+    public void invalidPasswordTest() throws Exception{
         onView(withId(R.id.username)).perform(typeText("bookiessp2019@gmail.com\n"));
         onView(withId(R.id.password)).perform(typeText("123\n"));
         onView(withId(R.id.loginBtn)).perform(click());
+        Thread.sleep(5000);
+        assertEquals("Incorrect password", password.getError());
     }
     @Test
     public void validUsernameAndPasswordTest(){
