@@ -31,7 +31,6 @@ public class LoginActivityTest {
     Instrumentation.ActivityMonitor monitor = getInstrumentation()
             .addMonitor(HomeActivity.class.getName(),null,false);
 
-    //TODO: setup mock login environment
     @Before
     public void setUp() throws Exception {
         activity = rule.getActivity();
@@ -45,14 +44,14 @@ public class LoginActivityTest {
     }
 
     @Test
-    public void missingUserNameTest(){
+    public void missingEmailTest(){
         onView(withId(R.id.username)).perform(typeText("\n"));
         onView(withId(R.id.password)).perform(typeText("\n"));
         onView(withId(R.id.loginBtn)).perform(click());
         assertEquals("Email is required", username.getError());
     }
     @Test
-    public void invalidUserNameTest(){
+    public void invalidEmailTest(){
         onView(withId(R.id.username)).perform(typeText("bookiessp2019@gmail\n"));
         onView(withId(R.id.password)).perform(typeText("123456\n"));
         onView(withId(R.id.loginBtn)).perform(click());
@@ -74,7 +73,7 @@ public class LoginActivityTest {
         assertEquals("Incorrect password", password.getError());
     }
     @Test
-    public void validUsernameAndPasswordTest(){
+    public void validEmailAndPasswordTest(){
         onView(withId(R.id.username)).perform(typeText("bookiessp2019@gmail.com\n"));
         onView(withId(R.id.password)).perform(typeText("123456\n"));
         onView(withId(R.id.loginBtn)).perform(click());
