@@ -1,9 +1,14 @@
 package com.example.bookies;
 
+import android.Manifest;
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 
+import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
 
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
@@ -37,6 +42,18 @@ public class IsbnActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_isbn);
+
+        //=====================Requesting Permissions=======
+        final int PERMISSION_ALL = 1;
+        final String[] PERMISSIONS = {
+                Manifest.permission.INTERNET,
+                android.Manifest.permission.CAMERA
+        };
+
+        if(!hasPermissions(this, PERMISSIONS)){
+            ActivityCompat.requestPermissions(this, PERMISSIONS, PERMISSION_ALL);
+        }
+        //==================================================
 
         // initialization of widgets
          home =  findViewById(R.id.homeBtn);
@@ -74,11 +91,19 @@ public class IsbnActivity extends AppCompatActivity {
         });
 
         //code for take button
+        final Context thisContext = this;
+        final Activity thisActivity = this;
         take.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(getApplicationContext(), BarcodeScannerActivity.class);
-                startActivity(i);
+
+                if(hasPermissions(thisContext, PERMISSIONS)) {
+                    Intent i = new Intent(getApplicationContext(), BarcodeScannerActivity.class);
+                    startActivity(i);
+                    return;
+                }
+                Toast.makeText(thisContext,"Permission to use camera not granted.",Toast.LENGTH_SHORT).show();
+                ActivityCompat.requestPermissions(thisActivity, PERMISSIONS, PERMISSION_ALL);
             }
         });
 
@@ -162,5 +187,18 @@ public class IsbnActivity extends AppCompatActivity {
                 });
         return books[0];
     }
+
+    /**checks for permissions*/
+    public static boolean hasPermissions(Context context, String... permissions) {
+        if (context != null && permissions != null) {
+            for (String permission : permissions) {
+                if (ActivityCompat.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
 
 }
