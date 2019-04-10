@@ -23,8 +23,6 @@ public class CreateActivity extends AppCompatActivity {
     protected static EditText password;
     private Button createButton;
 
-    boolean exist;
-
     //data base reference
     FirebaseFirestore db;
     private FirebaseAuth mAuth;
@@ -46,15 +44,6 @@ public class CreateActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 try {
-                    /*This method verifies the credentials the user entered
-                    if(!String.valueOf(email.getText()).equals("") || !String.valueOf(password.getText()).equals(""))
-                        createAccount(String.valueOf(email.getText()), String.valueOf(password.getText()));
-                    else{
-                        Toast.makeText(CreateActivity.this
-                                ,"Username/password cannot be null"
-                                ,Toast.LENGTH_LONG)
-                                .show();
-                    }*/
                     registerUser();
                 }
                 catch(Exception e){
@@ -94,10 +83,10 @@ public class CreateActivity extends AppCompatActivity {
                         finish();
                         startActivity(new Intent(CreateActivity.this, HomeActivity.class));
                     } else {
-
                         if (task.getException() instanceof FirebaseAuthUserCollisionException) {
-                            Toast.makeText(getApplicationContext(), "You are already registered", Toast.LENGTH_LONG).show();
-
+                            email.setError("Account already registered");
+                            email.requestFocus();
+                            //Toast.makeText(getApplicationContext(), "You are already registered", Toast.LENGTH_LONG).show();
                         } else {
                             Toast.makeText(getApplicationContext(), "Error occurred: " + task.getException().getMessage(), Toast.LENGTH_LONG).show();
                         }

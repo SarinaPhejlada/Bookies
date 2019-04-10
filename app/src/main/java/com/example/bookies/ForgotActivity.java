@@ -23,6 +23,9 @@ public class ForgotActivity extends AppCompatActivity {
     //database reference
     private FirebaseAuth mAuth;
 
+    //variables for testing
+    protected static boolean valid = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,11 +68,13 @@ public class ForgotActivity extends AppCompatActivity {
                 public void onComplete(@NonNull Task<Void> task) {
                     if (task.isSuccessful()) {
                         Toast.makeText(getApplicationContext(), "Check your email to reset your password", Toast.LENGTH_LONG).show();
+                        valid = true;
                         Intent i = new Intent(getApplicationContext(), LoginActivity.class);
                         startActivity(i);
                     } else {
-                        error = "Error: account does not exist";
-                        Toast.makeText(getApplicationContext(), error, Toast.LENGTH_LONG).show();
+                        email.setError("Account does not exist for email");
+                        email.requestFocus();
+                        //Toast.makeText(getApplicationContext(), error, Toast.LENGTH_LONG).show();
                     }
                 }
             });

@@ -161,8 +161,7 @@ public class IsbnActivity extends AppCompatActivity {
                                     .get("seller")
                                     .toString());
 
-                            book.setISBNNumber("ISBN #: "
-                                    + isbnNumber);
+                            book.setISBNNumber(isbnNumber);
 
                             book.setImageLink(document
                                     .getData()

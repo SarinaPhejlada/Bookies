@@ -28,8 +28,8 @@
             android:layout_height="148dp"
             android:layout_gravity="center"
             android:layout_marginTop="20dp"
-            android:scaleType="fitCenter"
             android:background="#ffffff"
+            android:scaleType="fitCenter"
             app:srcCompat="@drawable/logo" />
 
         <TextView
@@ -41,26 +41,11 @@
             android:textSize="36sp"
             app:fontFamily="sans-serif-smallcaps" />
 
-        <TextView
-            android:id="@+id/book1"
+        <ListView
+            android:id="@+id/listView"
             android:layout_width="match_parent"
-            android:layout_height="125dp"
-            android:text="Book #1"
-            app:fontFamily="sans-serif-smallcaps" />
+            android:layout_height="match_parent" />
 
-        <TextView
-            android:id="@+id/book2"
-            android:layout_width="match_parent"
-            android:layout_height="125dp"
-            android:text="Book #2"
-            app:fontFamily="sans-serif-smallcaps" />
-
-        <TextView
-            android:id="@+id/book3"
-            android:layout_width="match_parent"
-            android:layout_height="125dp"
-            android:text="Book #3"
-            app:fontFamily="sans-serif-smallcaps" />
     </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>
