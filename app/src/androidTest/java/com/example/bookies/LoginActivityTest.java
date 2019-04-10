@@ -70,7 +70,7 @@ public class LoginActivityTest {
         onView(withId(R.id.password)).perform(typeText("123\n"));
         onView(withId(R.id.loginBtn)).perform(click());
         Thread.sleep(5000);
-        assertEquals("Incorrect password", password.getError());
+        assertEquals("Incorrect password or account does not exist", password.getError());
     }
     @Test
     public void validEmailAndPasswordTest(){

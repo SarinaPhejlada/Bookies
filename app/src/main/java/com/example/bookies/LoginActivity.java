@@ -101,7 +101,7 @@ public class LoginActivity extends AppCompatActivity {
                         Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
                         startActivity(intent);
                     } else {
-                        password.setError("Incorrect password");
+                        password.setError("Incorrect password or account does not exist");
                         password.requestFocus();
                     }
                 }
