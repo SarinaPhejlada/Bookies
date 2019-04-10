@@ -77,6 +77,8 @@ public class IsbnActivityTest {
         Activity  barcodeScannerActivity = getInstrumentation().waitForMonitorWithTimeout(monitor2,5000);
         assertNotNull(barcodeScannerActivity);
 
-        //barcodeScannerActivity.finish();
+        barcodeScannerActivity.finish();
     }
+
+
 }

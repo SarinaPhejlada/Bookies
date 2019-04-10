@@ -21,7 +21,21 @@ public class BarcodeScannerActivity extends AppCompatActivity implements ZXingSc
 
     @Override
     public void handleResult(Result result) {
-        IsbnActivity.isbnEditText.setText(result.getText());
+
+        String text;
+        if(result == null) {
+            text = "No barcode scanned";
+        }
+        else{
+            if(!result.getBarcodeFormat().toString().equalsIgnoreCase("EAN_13")){
+                text = "Barcode is not an ISBN";
+            }
+            else{
+                text = result.getText();
+            }
+
+        }
+        IsbnActivity.isbnEditText.setText(text);
         onBackPressed();
     }
 
