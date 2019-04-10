@@ -5,6 +5,7 @@ import android.app.Instrumentation;
 import android.os.Bundle;
 
 import android.support.test.rule.ActivityTestRule;
+import android.widget.EditText;
 
 import org.junit.After;
 import org.junit.Before;
@@ -27,6 +28,9 @@ public class IsbnActivityTest {
 
     Instrumentation.ActivityMonitor monitor = getInstrumentation()
             .addMonitor(ReviewActivity.class.getName(),null,false);
+
+    Instrumentation.ActivityMonitor monitor2 = getInstrumentation()
+            .addMonitor(BarcodeScannerActivity.class.getName(),null,false);
 
 
     @Before
@@ -67,4 +71,12 @@ public class IsbnActivityTest {
 
     }
 
+    @Test
+    public void scanBarcodeOpensScannerSuccessfullyTest(){
+        onView(withId(R.id.takeBtn)).perform(click());
+        Activity  barcodeScannerActivity = getInstrumentation().waitForMonitorWithTimeout(monitor2,5000);
+        assertNotNull(barcodeScannerActivity);
+
+        //barcodeScannerActivity.finish();
+    }
 }
