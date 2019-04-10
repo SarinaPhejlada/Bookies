@@ -76,12 +76,11 @@ public class CreateActivityTest {
     }
 
     @Test
-    public void existingAccountTest() throws Exception{ //failed
+    public void existingAccountTest() throws Exception{
         onView(withId(R.id.email)).perform(typeText("sarina1116@gmail.com\n"));
         onView(withId(R.id.password)).perform(typeText("sarina\n"));
         onView(withId(R.id.createBtn)).perform(click());
         Thread.sleep(5000);
-        //assertTrue(exist);
         assertEquals("Account already registered", email.getError());
     }
 

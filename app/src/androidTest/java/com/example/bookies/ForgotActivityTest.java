@@ -24,7 +24,6 @@ public class ForgotActivityTest {
 
     private ForgotActivity activity;
     private EditText email;
-    private boolean valid;
 
     Instrumentation.ActivityMonitor monitor = getInstrumentation()
             .addMonitor(LoginActivity.class.getName(),null,false);
@@ -33,7 +32,6 @@ public class ForgotActivityTest {
     public void setUp() throws Exception {
         activity = rule.getActivity();
         email = activity.email;
-        valid = activity.valid;
     }
 
     @After

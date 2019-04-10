@@ -49,8 +49,6 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 try {
-                    //This method verifies the credentials the user entered
-                    //getLogin(String.valueOf(username.getText()), String.valueOf(password.getText()));
                     login();
                 }
                 catch(Exception e){
@@ -69,7 +67,7 @@ public class LoginActivity extends AppCompatActivity {
                 startActivity(i);
             }
         });
-        //code for creating an account
+        //code for creating an account button
         createAccountButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -103,9 +101,8 @@ public class LoginActivity extends AppCompatActivity {
                         Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
                         startActivity(intent);
                     } else {
-                        password.setError("Incorrect password");
+                        password.setError("Incorrect password or account does not exist");
                         password.requestFocus();
-                        //Toast.makeText(getApplicationContext(), "Error occurred: " + task.getException().getMessage(), Toast.LENGTH_LONG).show();
                     }
                 }
             });
