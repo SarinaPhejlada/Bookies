@@ -86,7 +86,6 @@ public class CreateActivity extends AppCompatActivity {
                         if (task.getException() instanceof FirebaseAuthUserCollisionException) {
                             email.setError("Account already registered");
                             email.requestFocus();
-                            //Toast.makeText(getApplicationContext(), "You are already registered", Toast.LENGTH_LONG).show();
                         } else {
                             Toast.makeText(getApplicationContext(), "Error occurred: " + task.getException().getMessage(), Toast.LENGTH_LONG).show();
                         }
