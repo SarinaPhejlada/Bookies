@@ -11,6 +11,9 @@ Team Members:
   4. Wilgens Pierre - Mainly handled the back-end side of the project along with Sarina (testing/scanning).
   5. Kevin Nguyen - Mainly handled media while lending a hand as best as possible wherever and whenever else help was needed.
   
+  
   Language used: Java
+  
   IDE used: Android Studio
+  
   Technology used: Android Studio, Emulators, JUnit, Firebase.
