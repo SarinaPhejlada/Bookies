@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.method.ScrollingMovementMethod;
 import android.view.View;
 
 import android.widget.ImageButton;
@@ -67,6 +68,8 @@ public class ReviewActivity extends AppCompatActivity {
 
         //adding book to history table
         addHistory(mAuth.getCurrentUser().getEmail(), book);
+
+        reviewTextView.setMovementMethod(new ScrollingMovementMethod());
 
     }
 
